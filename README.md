@@ -1,5 +1,6 @@
 # VESA
 Visualization Enabled Search Application
+Demo version is available [here](https://vesa.webapps.nfdi4earth.de/)
 <p align="center"> 
   <img src="./assets/Hero.png" alt="Hero image"> 
 </p>
