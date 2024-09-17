@@ -1,0 +1,20 @@
+body {
+  background: #f8f8f8;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+}
+
+#app {
+  height: 100vh;
+}
+
+.chart_div {
+  width: 100%;
+  height: 100%;
+}
