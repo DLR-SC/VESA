@@ -1,6 +1,6 @@
 import { Typography, useTheme } from "@mui/material";
 import Box from "@mui/material/Box";
-import DLRLogo from "assets/dlr_logo.svg";
+import DLRLogo from "../images/dlr_logo.svg";
 
 export const footerHeight = 40; //appBar height constant declaration
 

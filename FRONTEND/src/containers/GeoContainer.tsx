@@ -1,4 +1,4 @@
-import GeoFilterCard from "components/GeoFilterCard";
+import GeoFilterCard from "../components/GeoFilterCard";
 import { useState } from "react";
 import { IContainerProps, ILocation, IPointHoverHandler } from "types/appData";
 import GeoChartContainer from "./GeoChartContainer";

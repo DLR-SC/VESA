@@ -1,13 +1,13 @@
 import { CircularProgress } from "@mui/material";
-import CenteredCard from "components/CenteredCard";
-import { useDatafill } from "hooks/useDatafill";
+import CenteredCard from "../components/CenteredCard";
+import { useDatafill } from "../hooks/useDatafill";
 import _ from "lodash";
 import { IContainerProps, TemporalCoverage } from "types/appData";
 import LineSeriesChart from "../chartHooks/LineSeriesChart";
 import EmptyDatasetCard from "../components/EmptyDatasetCard";
 import { useAppSelector } from "../store/hooks";
 import { useGetInitialDatasetsQuery } from "../store/services/dataApi";
-import { convertToDateString } from "store/dataset/utility/utility";
+import { convertToDateString } from "../store/dataset/utility/utility";
 
 function LineSeriesChartContainer(props: IContainerProps): JSX.Element {
   const containerHeight = "400px";

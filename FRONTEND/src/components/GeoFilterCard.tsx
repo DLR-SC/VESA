@@ -1,7 +1,7 @@
 import { Button, Grid, Typography, useTheme } from "@mui/material";
 import { useCallback } from "react";
-import { setSelectedGeoData } from "store/dataset/datasetSlice";
-import { useAppDispatch, useAppSelector } from "store/hooks";
+import { setSelectedGeoData } from "../store/dataset/datasetSlice";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { ILocation } from "types/appData";
 
 interface IGeoFilterCard {

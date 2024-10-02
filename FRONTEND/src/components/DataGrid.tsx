@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Box, LinearProgress } from "@mui/material";
 import { GridColDef, DataGrid as MuiDataGrid } from "@mui/x-data-grid";
 import { IDatasetID, IDataset } from "types/appData";
-import { useGetAbstractMutation } from "store/services/miscApi";
+import { useGetAbstractMutation } from "../store/services/miscApi";
 
 interface ResultTableProps {
   data: IDataset[];

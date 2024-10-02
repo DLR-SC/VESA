@@ -1,14 +1,14 @@
 import { CircularProgress } from "@mui/material";
-import GeoChart from "chartHooks/GeoChart";
-import { useDatafill } from "hooks/useDatafill";
+import GeoChart from "../chartHooks/GeoChart";
+import { useDatafill } from "../hooks/useDatafill";
 import React from "react";
 import {
   setSelectedGeoData,
   updateSelectedGeoData,
-} from "store/dataset/datasetSlice";
-import { filterDatasetsIfChanged } from "store/dataset/utility/utility";
-import { useAppDispatch, useAppSelector } from "store/hooks";
-import { useGetInitialDatasetsQuery } from "store/services/dataApi";
+} from "../store/dataset/datasetSlice";
+import { filterDatasetsIfChanged } from "../store/dataset/utility/utility";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { useGetInitialDatasetsQuery } from "../store/services/dataApi";
 import { IContainerProps, IDatasetID, IPointHoverHandler } from "types/appData";
 import CenteredCard from "../components/CenteredCard";
 import EmptyDatasetCard from "../components/EmptyDatasetCard";

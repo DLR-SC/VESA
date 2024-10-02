@@ -6,11 +6,11 @@ import {
   useTheme,
 } from "@mui/material";
 import { useCallback } from "react";
-import { useAppSelector } from "store/hooks";
+import { useAppSelector } from "../store/hooks";
 import {
   useGetInitialDatasetsQuery,
   useGetRelatedDatasetsMutation,
-} from "store/services/dataApi";
+} from "../store/services/dataApi";
 import { IContainerProps, IDataset, IKeywordData } from "types/appData";
 import PlaceholderCard from "./CenteredCard";
 import DataGrid from "./DataGrid";

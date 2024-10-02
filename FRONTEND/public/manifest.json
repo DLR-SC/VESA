@@ -1,0 +1,16 @@
+{
+    "short_name": "VESA",
+    "name": "Visualisation Enabled Search Application",
+    "icons": [
+      {
+        "src": "favicon.ico",
+        "type": "image/x-icon",
+        "sizes": "16x16 32x32 48x48"
+      }
+    ],
+    "start_url": ".",
+    "display": "standalone",
+    "theme_color": "#ffffff",
+    "background_color": "#ffffff"
+  }
+  

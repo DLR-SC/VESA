@@ -1,15 +1,15 @@
 import { CircularProgress } from "@mui/material";
-import WordCloud from "chartHooks/WordCloud";
+import WordCloud from "../chartHooks/WordCloud";
 import { useCallback } from "react";
-import { useAppDispatch, useAppSelector } from "store/hooks";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { IContainerProps, IKeywordData } from "types/appData";
 import EmptyDatasetCard from "../components/EmptyDatasetCard";
 
-import { updateSelectedKeyword } from "store/selectedKeyword/selectedKeywordSlice";
+import { updateSelectedKeyword } from "../store/selectedKeyword/selectedKeywordSlice";
 import {
   useGetInitialKeywordDataQuery,
   useGetRelatedKeywordDataMutation,
-} from "store/services/dataApi";
+} from "../store/services/dataApi";
 import CenteredCard from "../components/CenteredCard";
 
 function WordCloudContainer(props: IContainerProps): JSX.Element {

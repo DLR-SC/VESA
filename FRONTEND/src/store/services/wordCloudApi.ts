@@ -8,7 +8,7 @@ type response = {
 
 export const wordCloudApi = createApi({
   reducerPath: "wordCloudApi",
-  baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_API_URL }),
+  baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
   endpoints: (builder) => ({
     getWordCloudData: builder.query<IWordCloudData[], void>({
       query: () => {
