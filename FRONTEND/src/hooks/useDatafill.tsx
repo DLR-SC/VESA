@@ -6,20 +6,20 @@ import {
   setGeoData,
   setKeywordData,
   setTimeData,
-} from "store/dataset/datasetSlice";
+} from "../store/dataset/datasetSlice";
 import {
   extractAndTransformTimeData,
   getDatasetID,
   getDatasetIDIntersection,
   intervalTreeFromTimedata,
   processAuthorData,
-} from "store/dataset/utility/utility";
-import { useAppDispatch, useAppSelector } from "store/hooks";
+} from "../store/dataset/utility/utility";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
   useGetInitialAuthorDataQuery,
   useGetInitialDatasetsQuery,
   useGetInitialKeywordDataQuery,
-} from "store/services/dataApi";
+} from "../store/services/dataApi";
 import {
   IDataset,
   IDatasetID,

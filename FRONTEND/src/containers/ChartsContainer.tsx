@@ -1,13 +1,13 @@
 import { Box, Grid, Paper, useTheme } from "@mui/material";
-import { appBarHeight } from "components/AppBar";
-import { calculateRowHeights } from "store/dataset/utility/utility";
+import { appBarHeight } from "../components/AppBar";
+import { calculateRowHeights } from "../store/dataset/utility/utility";
 import ResultBox from "../components/ResultBox";
 import SearchBox from "../components/SearchBox";
 import GeoContainer from "./GeoContainer";
 import LineSeriesChartContainer from "./LineSeriesChartContainer";
 import NodeChartContainer from "./NodeChartContainer";
 import WordCloudContainer from "./WordCloudContainer";
-import Chartspaper from "components/ChartsPaper";
+import Chartspaper from "../components/ChartsPaper";
 
 function ChartsContainer(): JSX.Element {
   const theme = useTheme();

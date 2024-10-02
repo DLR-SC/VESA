@@ -4,7 +4,7 @@ import {
   useGetTimeDatasetDataMutation,
   useGetTimeKeywordDataMutation,
   useGetAuthorDataMutation,
-} from "store/services/dataApi";
+} from "../store/services/dataApi";
 import { IDatasetID, TemporalCoverage } from "types/appData";
 
 export const useQuery = () => {

@@ -1,8 +1,8 @@
 import { CircularProgress } from "@mui/material";
-import CenteredCard from "components/CenteredCard";
-import { useQuery } from "hooks/useQuery";
-import { useAppSelector } from "store/hooks";
-import { useGetInitialAuthorDataQuery } from "store/services/dataApi";
+import CenteredCard from "../components/CenteredCard";
+import { useQuery } from "../hooks/useQuery";
+import { useAppSelector } from "../store/hooks";
+import { useGetInitialAuthorDataQuery } from "../store/services/dataApi";
 import NodeChart from "../chartHooks/NodeChart";
 import EmptyDatasetCard from "../components/EmptyDatasetCard";
 import { IContainerProps } from "types/appData";

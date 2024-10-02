@@ -9,7 +9,7 @@ type response = {
 
 export const testDataApi = createApi({
   reducerPath: "testDataApi",
-  baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_API_URL }),
+  baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
   endpoints: (builder) => ({
     getTestData: builder.query<ITestDataObject[], void>({
       query: () => {

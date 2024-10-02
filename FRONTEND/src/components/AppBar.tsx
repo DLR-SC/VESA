@@ -1,10 +1,10 @@
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { Fab, Tooltip, Typography, useTheme } from "@mui/material";
 import Box from "@mui/material/Box";
-import { useDatafill } from "hooks/useDatafill";
-import { resetDatasetSlice } from "store/dataset/datasetSlice";
-import { useAppDispatch } from "store/hooks";
-import { resetSelectedKeyword } from "store/selectedKeyword/selectedKeywordSlice";
+import { useDatafill } from "../hooks/useDatafill";
+import { resetDatasetSlice } from "../store/dataset/datasetSlice";
+import { useAppDispatch } from "../store/hooks";
+import { resetSelectedKeyword } from "../store/selectedKeyword/selectedKeywordSlice";
 
 export const appBarHeight = 56; //appBar height constant declaration
 

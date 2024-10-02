@@ -1,12 +1,12 @@
 import { ThemeProvider } from "@emotion/react";
 import { CssBaseline, Stack } from "@mui/material";
-import AppBar from "components/AppBar";
-import MainContent from "components/MainContent";
+import AppBar from "./components/AppBar";
+import MainContent from "./components/MainContent";
 import { Provider } from "react-redux";
-import { Store } from "store";
-import Theme from "utils/Theme";
+import { Store } from "./store";
+import Theme from "./utils/Theme";
 import "./App.scss";
-import Footer from "components/Footer";
+import Footer from "./components/Footer";
 
 /**
  * This is the root element of the application. The layout is made up of three sections: The Appbar, the search box and the Main content.

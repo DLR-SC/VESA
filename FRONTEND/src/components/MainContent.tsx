@@ -3,7 +3,7 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import {
   useGetInitialDatasetsQuery,
   useGetInitialKeywordDataQuery,
-} from "store/services/dataApi";
+} from "../store/services/dataApi";
 import ChartsContainer from "../containers/ChartsContainer";
 import ErrorDialog from "./ErrorDialog";
 

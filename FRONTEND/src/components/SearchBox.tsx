@@ -7,11 +7,11 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useDatafill } from "hooks/useDatafill";
+import { useDatafill } from "../hooks/useDatafill";
 import React from "react";
-import { useAppDispatch, useAppSelector } from "store/hooks";
-import { updateSelectedKeyword } from "store/selectedKeyword/selectedKeywordSlice";
-import { useGetRelatedKeywordDataMutation } from "store/services/dataApi";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { updateSelectedKeyword } from "../store/selectedKeyword/selectedKeywordSlice";
+import { useGetRelatedKeywordDataMutation } from "../store/services/dataApi";
 import { IKeywordData } from "types/appData";
 /**
  * The SearchBox component handles all the functionalities related to getting related keyword data

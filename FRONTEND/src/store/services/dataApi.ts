@@ -36,7 +36,7 @@ type postTimeDataRequestType = {
 
 export const dataApi = createApi({
   reducerPath: "dataApi",
-  baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_API_URL }),
+  baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
   endpoints: (builder) => ({
     // API end point for getting initial data
     getInitialDatasets: builder.query<DatasetResponse, void>({
