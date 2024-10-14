@@ -11,6 +11,9 @@ interface IGeoChartProps {
   onPointHover: IPointHoverHandler;
 }
 
+const LegendToggleIconSvgPath =
+  "M20 15H4v-2h16zm0 2H4v2h16zm-5-6 5-3.55V5l-5 3.55L10 5 4 8.66V11l5.92-3.61z";
+
 const GeoChart: React.FC<IGeoChartProps> = ({
   data,
   selectedCoordinate,
@@ -49,18 +52,50 @@ const GeoChart: React.FC<IGeoChartProps> = ({
 
     let zoomControl = am5map.ZoomControl.new(root, {});
 
-    zoomControl.homeButton.set("visible", true);
+    let zoomControlTooltip = am5.Tooltip.new(root, { dy: -15 });
 
-    // let zoomControlTooltip = am5.Tooltip.new(root, {});
+    zoomControlTooltip.get("background")?.setAll({
+      fill: am5.color(0xeeeeee),
+    });
 
-    // zoomControlTooltip.get("background")?.setAll({
-    //   fill: am5.color(0xeeeeee),
+    let legendButton = chart.children.push(
+      am5.Button.new(root, {
+        width: 35,
+        height: 35,
+        icon: am5.Graphics.new(root, {
+          svgPath: LegendToggleIconSvgPath,
+          height: 30,
+          width: 30,
+          fill: am5.color(0xffffff),
+        }),
+        tooltip: zoomControlTooltip,
+        tooltipText: "Toggle map legends",
+      })
+    );
+
+    // chart.chartContainer.onPrivate("width", (width) => {
+    //   if (width) legendButton.set("dx", width - 45);
     // });
 
-    // zoomControl.minusButton.set("tooltip", zoomControlTooltip)
+    // chart.chartContainer.onPrivate("height", (height) => {
+    //   if (height) legendButton.set("dy", height - 161);
+    // });
 
-    // zoomControl.minusButton.set("tooltipText", "Zoom out")
-    
+    legendButton.events.on("click", function () {
+      setToggleLegend((prevToggleLegend: any) => !prevToggleLegend);
+    });
+
+    zoomControl.children.insertIndex(0, legendButton);
+    zoomControl.homeButton.set("visible", true);
+
+    zoomControl.minusButton.set("tooltip", zoomControlTooltip);
+    zoomControl.plusButton.set("tooltip", zoomControlTooltip);
+    zoomControl.homeButton.set("tooltip", zoomControlTooltip);
+
+    zoomControl.minusButton.set("tooltipText", "Zoom Out");
+    zoomControl.plusButton.set("tooltipText", "Zoom In");
+    zoomControl.homeButton.set("tooltipText", "Reset Zoom");
+
     chart.set("zoomControl", zoomControl);
 
     chart.series.push(
@@ -261,30 +296,6 @@ const GeoChart: React.FC<IGeoChartProps> = ({
       fontSize: "12px",
       fontWeight: "400",
       textAlign: "right",
-    });
-
-    let button = chart.children.push(
-      am5.Button.new(root, {
-        width: 35,
-        height: 35,
-        label: am5.Label.new(root, {
-          text: "L",
-          x: am5.percent(-50),
-          y: am5.percent(-50),
-        }),
-      })
-    );
-
-    chart.chartContainer.onPrivate("width", (width) => {
-      if (width) button.set("dx", width - 45);
-    });
-
-    chart.chartContainer.onPrivate("height", (height) => {
-      if (height) button.set("dy", height - 161);
-    });
-
-    button.events.on("click", function () {
-      setToggleLegend((prevToggleLegend: any) => !prevToggleLegend);
     });
 
     setChartState(chart);
