@@ -50,16 +50,47 @@ const GeoChart: React.FC<IGeoChartProps> = ({
       })
     );
 
+    
+
+
     let zoomControl = am5map.ZoomControl.new(root, {});
-
-    zoomControl.homeButton.set("visible", true);
-
+    
     let zoomControlTooltip = am5.Tooltip.new(root, { dy: -15 });
-
+    
     zoomControlTooltip.get("background")?.setAll({
       fill: am5.color(0xeeeeee),
     });
 
+    let legendButton = chart.children.push(
+      am5.Button.new(root, {
+        width: 35,
+        height: 35,
+        icon: am5.Graphics.new(root, {
+          svgPath: LegendToggleIconSvgPath,
+          height: 30,
+          width: 30,
+          fill: am5.color(0xffffff),
+        }),
+        tooltip: zoomControlTooltip,
+        tooltipText: "Toggle map legends",
+      })
+    );
+
+    // chart.chartContainer.onPrivate("width", (width) => {
+    //   if (width) legendButton.set("dx", width - 45);
+    // });
+
+    // chart.chartContainer.onPrivate("height", (height) => {
+    //   if (height) legendButton.set("dy", height - 161);
+    // });
+    
+    legendButton.events.on("click", function () {
+      setToggleLegend((prevToggleLegend: any) => !prevToggleLegend);
+    });
+
+    zoomControl.children.insertIndex(0,legendButton)
+    zoomControl.homeButton.set("visible", true);
+    
     zoomControl.minusButton.set("tooltip", zoomControlTooltip);
     zoomControl.plusButton.set("tooltip", zoomControlTooltip);
     zoomControl.homeButton.set("tooltip", zoomControlTooltip);
@@ -268,33 +299,6 @@ const GeoChart: React.FC<IGeoChartProps> = ({
       fontSize: "12px",
       fontWeight: "400",
       textAlign: "right",
-    });
-
-    let button = chart.children.push(
-      am5.Button.new(root, {
-        width: 35,
-        height: 35,
-        icon: am5.Graphics.new(root, {
-          svgPath: LegendToggleIconSvgPath,
-          height: 30,
-          width: 30,
-          fill: am5.color(0xffffff),
-        }),
-        tooltip: zoomControlTooltip,
-        tooltipText: "Toggle map legends",
-      })
-    );
-
-    chart.chartContainer.onPrivate("width", (width) => {
-      if (width) button.set("dx", width - 45);
-    });
-
-    chart.chartContainer.onPrivate("height", (height) => {
-      if (height) button.set("dy", height - 161);
-    });
-
-    button.events.on("click", function () {
-      setToggleLegend((prevToggleLegend: any) => !prevToggleLegend);
     });
 
     setChartState(chart);
