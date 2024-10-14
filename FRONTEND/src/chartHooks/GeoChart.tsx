@@ -19,7 +19,7 @@ const GeoChart: React.FC<IGeoChartProps> = ({
 }) => {
   const [geoData, setGeoData] = useState<any>(null);
   const [chartState, setChartState] = useState<am5map.MapChart | null>(null);
-  const [toggleLegend, setToggleLegend] = useState<any>(false);
+  const [toggleLegend, setToggleLegend] = useState<any>(true);
 
   const selectedLegendRef = React.useRef<am5.Legend | null>(null); //Ref for the selected legend
   const legendRef = React.useRef<am5.Legend | null>(null); //Ref for the main legend
