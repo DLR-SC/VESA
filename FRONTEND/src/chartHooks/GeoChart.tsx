@@ -11,6 +11,9 @@ interface IGeoChartProps {
   onPointHover: IPointHoverHandler;
 }
 
+const LegendToggleIconSvgPath =
+  "M20 15H4v-2h16zm0 2H4v2h16zm-5-6 5-3.55V5l-5 3.55L10 5 4 8.66V11l5.92-3.61z";
+
 const GeoChart: React.FC<IGeoChartProps> = ({
   data,
   selectedCoordinate,
@@ -51,16 +54,20 @@ const GeoChart: React.FC<IGeoChartProps> = ({
 
     zoomControl.homeButton.set("visible", true);
 
-    // let zoomControlTooltip = am5.Tooltip.new(root, {});
+    let zoomControlTooltip = am5.Tooltip.new(root, { dy: -15 });
 
-    // zoomControlTooltip.get("background")?.setAll({
-    //   fill: am5.color(0xeeeeee),
-    // });
+    zoomControlTooltip.get("background")?.setAll({
+      fill: am5.color(0xeeeeee),
+    });
 
-    // zoomControl.minusButton.set("tooltip", zoomControlTooltip)
+    zoomControl.minusButton.set("tooltip", zoomControlTooltip);
+    zoomControl.plusButton.set("tooltip", zoomControlTooltip);
+    zoomControl.homeButton.set("tooltip", zoomControlTooltip);
 
-    // zoomControl.minusButton.set("tooltipText", "Zoom out")
-    
+    zoomControl.minusButton.set("tooltipText", "Zoom Out");
+    zoomControl.plusButton.set("tooltipText", "Zoom In");
+    zoomControl.homeButton.set("tooltipText", "Reset Zoom");
+
     chart.set("zoomControl", zoomControl);
 
     chart.series.push(
@@ -267,11 +274,14 @@ const GeoChart: React.FC<IGeoChartProps> = ({
       am5.Button.new(root, {
         width: 35,
         height: 35,
-        label: am5.Label.new(root, {
-          text: "L",
-          x: am5.percent(-50),
-          y: am5.percent(-50),
+        icon: am5.Graphics.new(root, {
+          svgPath: LegendToggleIconSvgPath,
+          height: 30,
+          width: 30,
+          fill: am5.color(0xffffff),
         }),
+        tooltip: zoomControlTooltip,
+        tooltipText: "Toggle map legends",
       })
     );
 
