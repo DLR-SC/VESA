@@ -116,11 +116,12 @@ const GeoChart: React.FC<IGeoChartProps> = ({
         cursorOverStyle: "pointer",
       });
 
+      // Add circles
       let circle1 = container.children.push(
         am5.Circle.new(root, {
           radius: 8,
           tooltipY: 0,
-          fill: am5.color(0xff8c00),
+          fill: am5.color(0xff8c00), // default color
         })
       );
 
@@ -129,7 +130,7 @@ const GeoChart: React.FC<IGeoChartProps> = ({
           radius: 12,
           fillOpacity: 0.3,
           tooltipY: 0,
-          fill: am5.color(0xff8c00),
+          fill: am5.color(0xff8c00), // default color
         })
       );
 
@@ -138,31 +139,12 @@ const GeoChart: React.FC<IGeoChartProps> = ({
           radius: 16,
           fillOpacity: 0.3,
           tooltipY: 0,
-          fill: am5.color(0xff8c00),
+          fill: am5.color(0xff8c00), // default color
         })
       );
 
-      // adapters for the circle fills
-      circle1.adapters.add("fill", function (fill, target) {
-        return getColor(target.dataItem);
-      });
-
-      circle2.adapters.add("fill", function (fill, target) {
-        return getColor(target.dataItem);
-      });
-
-      circle3.adapters.add("fill", function (fill, target) {
-        return getColor(target.dataItem);
-      });
-
-      //@ts-ignore
-      dataItem.on("children", () => {
-        circle1._markDirtyKey("fill");
-        circle2._markDirtyKey("fill");
-        circle3._markDirtyKey("fill");
-      });
-
-      container.children.push(
+      // Add label
+      let label = container.children.push(
         am5.Label.new(root, {
           centerX: am5.p50,
           centerY: am5.p50,
@@ -173,6 +155,48 @@ const GeoChart: React.FC<IGeoChartProps> = ({
         })
       );
 
+      // Update cluster color based on children's colors
+      dataItem.on("children", function (children, target) {
+        if (target) {
+          let bullet = target.get("bullet")?.get("sprite");
+          if (children && children.length) {
+            let color: am5.Color | undefined;
+            let sameGroupId = true;
+            let groupId: string | undefined;
+
+            am5.array.eachContinue(children, function (child) {
+              let dataContext = child.dataContext as { groupId: string };
+              if (!dataContext) return true;
+              if (groupId === undefined) {
+                groupId = dataContext.groupId;
+              } else if (groupId !== dataContext.groupId) {
+                sameGroupId = false;
+                return false; // stop iteration
+              }
+              return true;
+            });
+
+            if (sameGroupId && groupId) {
+              color = getColorByGroupId(groupId);
+            } else {
+              // Use neutral color if combined bullet consists of multiple groupIds
+              color = am5.color(0x999998);
+            }
+
+            if (bullet) {
+              // @ts-ignore
+              bullet.children.each(function (circle) {
+                if (circle instanceof am5.Circle) {
+                  circle.setAll({
+                    fill: color,
+                  });
+                }
+              });
+            }
+          }
+        }
+      });
+
       container.events.on("click", function (e) {
         if (e.target.dataItem) pointSeries.zoomToCluster(e.target.dataItem);
       });
@@ -182,23 +206,19 @@ const GeoChart: React.FC<IGeoChartProps> = ({
       });
     });
 
+    // Create regular bullets
     pointSeries.bullets.push((root, series, dataItem) => {
       const item = dataItem.dataContext as IGeoData;
 
-      /**
-       * I tried accessing the coordinates directly from the dataItem but it was not working
-       * const coordinates = item.coordinates; //undefined item.coordinates error
-       */
       const coordinates = dataItem.get("geometry")?.coordinates as number[];
-
       const lat = coordinates[1].toFixed(2);
       const lon = coordinates[0].toFixed(2);
 
-      let color = item.groupId === "dataset" ? 0xff8c00 : 0x8c00ff;
+      let color = getColorByGroupId(item.groupId);
 
       let circle = am5.Circle.new(root, {
         radius: 6,
-        fill: am5.color(color),
+        fill: color,
         cursorOverStyle: "pointer",
         toggleKey: "active",
       });
@@ -231,7 +251,7 @@ const GeoChart: React.FC<IGeoChartProps> = ({
         id: IDatasetID;
         groupId: string;
       };
-      const isActive = dataContext.groupId == "active" ? true : false;
+      const isActive = dataContext.groupId == "active";
 
       circle.set("active", isActive);
 
@@ -332,22 +352,14 @@ const GeoChart: React.FC<IGeoChartProps> = ({
 
 export default GeoChart;
 
-// function for returning colors for clusters based on their group
-const getColor = (dataItem: any) => {
-  let children = dataItem.get("children");
-
-  if (children && children.length > 0) {
-    let child = children[0];
-    // console.log(child.dataContext )
-    if (child.dataContext.groupId === "staccollection") {
-      return am5.color(0x8c00ff);
-    }
-    if (child.dataContext.groupId === "dataset") {
-      return am5.color(0xff8c00);
-    }
-    if (child.dataContext.groupId === "active") {
-      return am5.color(0xed254e);
-    }
+function getColorByGroupId(groupId: string): am5.Color {
+  if (groupId === "staccollection") {
+    return am5.color(0x8c00ff);
+  } else if (groupId === "dataset") {
+    return am5.color(0xff8c00);
+  } else if (groupId === "active") {
+    return am5.color(0xed254e);
+  } else {
+    return am5.color(0x999998); // neutral color
   }
-  // return am5.color(0xff8c00);
-};
+}
