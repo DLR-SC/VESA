@@ -74,7 +74,6 @@ const GeoChart: React.FC<IGeoChartProps> = ({
     const pointSeries = createPointSeries(
       root,
       chart,
-      geoData,
       selectedCoordinate,
       onPointHover
     );
@@ -198,7 +197,6 @@ function createMapPolygonSeries(root: am5.Root, chart: am5map.MapChart) {
 function createPointSeries(
   root: am5.Root,
   chart: am5map.MapChart,
-  geoData: GeoDataItem[],
   selectedCoordinate: (id: IDatasetID) => void,
   onPointHover: IPointHoverHandler
 ): am5map.ClusteredPointSeries {
@@ -208,8 +206,6 @@ function createPointSeries(
       minDistance: 15,
     })
   );
-
-  pointSeries.data.setAll(geoData);
 
   pointSeries.set("clusteredBullet", (root, series, dataItem) =>
     createClusteredBullet(root, series, dataItem)
