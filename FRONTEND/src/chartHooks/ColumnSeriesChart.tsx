@@ -57,6 +57,7 @@ function ColumnSeriesChart(props: ITimeSeriesProps): JSX.Element {
         max: new Date(initialDate.end_date as string).getTime(),
         strictMinMaxSelection: true,
         maxDeviation: 0.1,
+        groupData:true,
         baseInterval: {
           timeUnit: "day",
           count: 1,
