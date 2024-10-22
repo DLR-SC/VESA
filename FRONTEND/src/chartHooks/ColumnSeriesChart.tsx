@@ -10,15 +10,16 @@ interface ITimeSeriesProps {
   initialDate: TemporalCoverage;
 }
 
-function LineSeriesChart(props: ITimeSeriesProps): JSX.Element {
+function ColumnSeriesChart(props: ITimeSeriesProps): JSX.Element {
   const chartRef = React.useRef<am5xy.XYChart | null>(null);
   const scrollbarRef = React.useRef<am5xy.XYChartScrollbar | null>(null);
-  const customColor = { blue: am5.color(0x6894dc) }; // blue color for the stroke and fill
+  const customColor = { blue: am5.color(0x6894dc) }; // blue color for the columns
 
   const [timeRange, setTimeRange] = React.useState<TemporalCoverage>(
     props.initialDate
   );
 
+  // Modularized helper functions
   function createRoot(containerId: string): am5.Root {
     let root = am5.Root.new(containerId);
 
@@ -87,28 +88,22 @@ function LineSeriesChart(props: ITimeSeriesProps): JSX.Element {
     yAxis: am5xy.ValueAxis<am5xy.AxisRenderer>
   ) {
     let series = chart.series.push(
-      am5xy.LineSeries.new(root, {
-        connect: false,
+      am5xy.ColumnSeries.new(root, {
+        name: "Series",
         xAxis: xAxis,
         yAxis: yAxis,
         valueYField: "value",
         valueXField: "date",
         tooltip: am5.Tooltip.new(root, {
-          pointerOrientation: "vertical",
           labelText: "{valueY}",
         }),
-        fill: customColor.blue,
-        stroke: customColor.blue,
       })
     );
 
-    series.fills.template.setAll({
-      fillOpacity: 0.2,
-      visible: true,
-    });
-
-    series.strokes.template.setAll({
-      strokeWidth: 2,
+    series.columns.template.setAll({
+      strokeOpacity: 0,
+      fill: customColor.blue,
+      stroke: customColor.blue,
     });
 
     return series;
@@ -232,14 +227,14 @@ function LineSeriesChart(props: ITimeSeriesProps): JSX.Element {
     }; // Cleanup function
   }, []);
 
-  /** Setting the data for line series and scrollbar series */
+  /** Setting the data for series and scrollbar series */
   useEffect(() => {
     if (chartRef.current && scrollbarRef.current) {
-      const lineSeries = chartRef.current.series.getIndex(0);
+      const mainSeries = chartRef.current.series.getIndex(0);
       const sbSeries = scrollbarRef.current.chart.series.getIndex(0);
 
-      if (lineSeries && sbSeries) {
-        lineSeries.data.setAll(props.data);
+      if (mainSeries && sbSeries) {
+        mainSeries.data.setAll(props.data);
         sbSeries.data.setAll(props.data);
       }
 
@@ -254,4 +249,4 @@ function LineSeriesChart(props: ITimeSeriesProps): JSX.Element {
   return <div id="time-chart" className="chart_div" />;
 }
 
-export default LineSeriesChart;
+export default ColumnSeriesChart;
