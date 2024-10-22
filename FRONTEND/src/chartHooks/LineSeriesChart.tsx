@@ -11,20 +11,16 @@ interface ITimeSeriesProps {
 }
 
 function LineSeriesChart(props: ITimeSeriesProps): JSX.Element {
-  const [chartState, setChartState] = React.useState<am5xy.XYChart | null>(
-    null
-  ); // Chart state
-  const [scrollBarChartState, setScrollbarChartState] =
-    React.useState<am5xy.XYChartScrollbar | null>(null); // Scrollbar Chart state
+  const chartRef = React.useRef<am5xy.XYChart | null>(null);
+  const scrollbarRef = React.useRef<am5xy.XYChartScrollbar | null>(null);
   const customColor = { blue: am5.color(0x6894dc) }; // blue color for the stroke and fill
 
   const [timeRange, setTimeRange] = React.useState<TemporalCoverage>(
     props.initialDate
   );
-  const [thumbMoved, setThumbMoved] = React.useState<boolean>(false);
 
-  useEffect(() => {
-    let root = am5.Root.new("time-chart");
+  function createRoot(containerId: string): am5.Root {
+    let root = am5.Root.new(containerId);
 
     // Set themes
     root.setThemes([am5themes_Animated.new(root)]);
@@ -34,7 +30,11 @@ function LineSeriesChart(props: ITimeSeriesProps): JSX.Element {
       dateFields: ["valueX"],
     });
 
-    let chart = root.container.children.push(
+    return root;
+  }
+
+  function createChart(root: am5.Root): am5xy.XYChart {
+    return root.container.children.push(
       am5xy.XYChart.new(root, {
         panX: false,
         panY: false,
@@ -43,16 +43,19 @@ function LineSeriesChart(props: ITimeSeriesProps): JSX.Element {
         paddingLeft: 0,
       })
     );
+  }
 
-    // Create axes
+  function createAxes(
+    root: am5.Root,
+    chart: am5xy.XYChart,
+    initialDate: TemporalCoverage
+  ) {
     let xAxis = chart.xAxes.push(
       am5xy.DateAxis.new(root, {
-        min: new Date(props.initialDate.start_date as string).getTime(),
-        max: new Date(props.initialDate.end_date as string).getTime(),
+        min: new Date(initialDate.start_date as string).getTime(),
+        max: new Date(initialDate.end_date as string).getTime(),
         strictMinMaxSelection: true,
         maxDeviation: 0.1,
-        // groupData: true,
-        // groupCount: 2500,
         baseInterval: {
           timeUnit: "day",
           count: 1,
@@ -74,7 +77,15 @@ function LineSeriesChart(props: ITimeSeriesProps): JSX.Element {
       })
     );
 
-    // Add series
+    return { xAxis, yAxis };
+  }
+
+  function createSeries(
+    root: am5.Root,
+    chart: am5xy.XYChart,
+    xAxis: am5xy.DateAxis<am5xy.AxisRenderer>,
+    yAxis: am5xy.ValueAxis<am5xy.AxisRenderer>
+  ) {
     let series = chart.series.push(
       am5xy.LineSeries.new(root, {
         connect: false,
@@ -100,12 +111,21 @@ function LineSeriesChart(props: ITimeSeriesProps): JSX.Element {
       strokeWidth: 2,
     });
 
+    return series;
+  }
+
+  function createScrollbar(
+    root: am5.Root,
+    chart: am5xy.XYChart,
+    xAxis: am5xy.DateAxis<am5xy.AxisRenderer>,
+    initialDate: TemporalCoverage
+  ) {
     let scrollbar = am5xy.XYChartScrollbar.new(root, {
       orientation: "horizontal",
       height: 60,
     });
 
-    xAxis.onPrivate("selectionMin", function (value, target) {
+    xAxis.onPrivate("selectionMin", function (value) {
       if (value) {
         let startDate = new Date(value);
         setTimeRange((prev) => ({
@@ -115,7 +135,7 @@ function LineSeriesChart(props: ITimeSeriesProps): JSX.Element {
       }
     });
 
-    xAxis.onPrivate("selectionMax", function (value, target) {
+    xAxis.onPrivate("selectionMax", function (value) {
       if (value) {
         let endDate = new Date(value);
         setTimeRange((prev) => ({
@@ -143,10 +163,8 @@ function LineSeriesChart(props: ITimeSeriesProps): JSX.Element {
 
     let sbxAxis = scrollbar.chart.xAxes.push(
       am5xy.DateAxis.new(root, {
-        min: new Date(props.initialDate.start_date as string).getTime(),
-        max: new Date(props.initialDate.end_date as string).getTime(),
-        // groupData: true,
-        // groupIntervals: [{ timeUnit: "month", count: 1 }],
+        min: new Date(initialDate.start_date as string).getTime(),
+        max: new Date(initialDate.end_date as string).getTime(),
         baseInterval: { timeUnit: "day", count: 1 },
         renderer: am5xy.AxisRendererX.new(root, {
           minorGridEnabled: true,
@@ -175,7 +193,15 @@ function LineSeriesChart(props: ITimeSeriesProps): JSX.Element {
     sbseries.strokes.template.setAll({
       strokeWidth: 2,
     });
-    // Add cursor
+
+    return scrollbar;
+  }
+
+  function addCursor(
+    root: am5.Root,
+    chart: am5xy.XYChart,
+    xAxis: am5xy.DateAxis<am5xy.AxisRenderer>
+  ) {
     let cursor = chart.set(
       "cursor",
       am5xy.XYCursor.new(root, {
@@ -184,43 +210,48 @@ function LineSeriesChart(props: ITimeSeriesProps): JSX.Element {
       })
     );
     cursor.lineY.set("visible", false);
+  }
+
+  useEffect(() => {
+    let root = createRoot("time-chart");
+    let chart = createChart(root);
+    let { xAxis, yAxis } = createAxes(root, chart, props.initialDate);
+    let series = createSeries(root, chart, xAxis, yAxis);
+    let scrollbar = createScrollbar(root, chart, xAxis, props.initialDate);
+    addCursor(root, chart, xAxis);
 
     series.appear(1000, 100);
     chart.appear(1000, 100);
 
-    setChartState(chart);
-    setScrollbarChartState(scrollbar);
+    chartRef.current = chart;
+    scrollbarRef.current = scrollbar;
+
     return () => {
       root.dispose();
       chart.dispose();
     }; // Cleanup function
   }, []);
 
-  /** Setting the data for lineseries and scrollbar series */
+  /** Setting the data for line series and scrollbar series */
   useEffect(() => {
-    const isChartStateReady = chartState && chartState.series.length > 0;
-    const isScrollBarChartStateReady =
-      scrollBarChartState && scrollBarChartState.chart.series.length > 0;
+    if (chartRef.current && scrollbarRef.current) {
+      const lineSeries = chartRef.current.series.getIndex(0);
+      const sbSeries = scrollbarRef.current.chart.series.getIndex(0);
 
-    if (isChartStateReady && isScrollBarChartStateReady) {
-      const sbSeries = scrollBarChartState.chart.series.getIndex(0);
-      const lineSeries = chartState.series.getIndex(0);
-
-      if (sbSeries && lineSeries) {
+      if (lineSeries && sbSeries) {
         lineSeries.data.setAll(props.data);
         sbSeries.data.setAll(props.data);
       }
 
-      chartState.zoomOut();
+      chartRef.current.zoomOut();
     }
-  }, [props.data, chartState, scrollBarChartState]);
+  }, [props.data]);
 
   useEffect(() => {
-    if (chartState) {
-      props.handleScroll(timeRange);
-    }
+    props.handleScroll(timeRange);
   }, [timeRange]);
 
   return <div id="time-chart" className="chart_div" />;
 }
+
 export default LineSeriesChart;
