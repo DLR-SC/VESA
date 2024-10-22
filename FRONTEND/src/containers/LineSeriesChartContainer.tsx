@@ -8,6 +8,7 @@ import EmptyDatasetCard from "../components/EmptyDatasetCard";
 import { useAppSelector } from "../store/hooks";
 import { useGetInitialDatasetsQuery } from "../store/services/dataApi";
 import { convertToDateString } from "../store/dataset/utility/utility";
+import ColumnSeriesChart from "../chartHooks/ColumnSeriesChart";
 
 function LineSeriesChartContainer(props: IContainerProps): JSX.Element {
   const containerHeight = "400px";
@@ -34,7 +35,7 @@ function LineSeriesChartContainer(props: IContainerProps): JSX.Element {
 
   return timeData.length ? (
     <>
-      <LineSeriesChart
+      <ColumnSeriesChart
         data={timeData}
         handleScroll={handleScroll}
         initialDate={{
