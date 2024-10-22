@@ -204,6 +204,7 @@ function createPointSeries(
     am5map.ClusteredPointSeries.new(root, {
       groupIdField: "groupId",
       minDistance: 15,
+      affectsBounds:true,
     })
   );
 
