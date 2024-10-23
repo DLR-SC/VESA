@@ -7,6 +7,7 @@ import NodeChartContainer from "./NodeChartContainer";
 import WordCloudContainer from "./WordCloudContainer";
 import Chartspaper from "../components/ChartsPaper";
 import InfoCard from "../components/InfoCard";
+import { chartsInfo } from "../data/chartsInformation";
 
 function ChartsContainer(): JSX.Element {
   const theme = useTheme();
@@ -17,44 +18,83 @@ function ChartsContainer(): JSX.Element {
     columnSpacing: theme.spacing(2),
   };
 
+  // Configuration array for chart items
+  const chartItems = [
+    {
+      xs: 4,
+      content: (
+        <>
+          <SearchBox />
+          <WordCloudContainer />
+        </>
+      ),
+      infoTitle: chartsInfo.wordCloud.title,
+      infoDescription: chartsInfo.wordCloud.description,
+    },
+    {
+      xs: 4,
+      content: <ResultBox />,
+      infoTitle: chartsInfo.resultsTable.title,
+      infoDescription: chartsInfo.resultsTable.description,
+    },
+    {
+      xs: 4,
+      content: <GeoContainer />,
+      infoTitle: chartsInfo.mapsContainer.title,
+      infoDescription: chartsInfo.mapsContainer.description,
+    },
+    {
+      xs: 12,
+      sm: 4,
+      content: <NodeChartContainer />,
+      infoTitle: chartsInfo.nordDirectedGraphs.title,
+      infoDescription: chartsInfo.nordDirectedGraphs.description,
+    },
+    {
+      xs: 12,
+      sm: 8,
+      content: <LineSeriesChartContainer />,
+      infoTitle: chartsInfo.columnBarChart.title,
+      infoDescription: chartsInfo.columnBarChart.description,
+    },
+  ];
+
   return (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
+      {/* First Row */}
       <Grid container {...gridSettings} paddingBottom={0}>
-        <Grid item xs={4} display={"flex"} flexDirection={"column"}>
-          <Chartspaper>
-            <>
-              <SearchBox />
-              <WordCloudContainer />
-            </>
-            <InfoCard title="sample" description="sample text" />
-          </Chartspaper>
-        </Grid>
-        <Grid item xs={4} display={"flex"} flexDirection={"column"}>
-          <Chartspaper>
-            <ResultBox />
-            <InfoCard title="sample" description="sample text" />
-          </Chartspaper>
-        </Grid>
-        <Grid item xs={4} display={"flex"} flexDirection={"column"}>
-          <Chartspaper>
-            <GeoContainer />
-            <InfoCard title="sample" description="sample text" />
-          </Chartspaper>
-        </Grid>
+        {chartItems.slice(0, 3).map((item, index) => (
+          <Grid
+            item
+            key={index}
+            xs={item.xs}
+            display="flex"
+            flexDirection="column"
+          >
+            <Chartspaper>
+              {item.content}
+              <InfoCard title={item.infoTitle} description={item.infoDescription} />
+            </Chartspaper>
+          </Grid>
+        ))}
       </Grid>
+      {/* Second Row */}
       <Grid container {...gridSettings}>
-        <Grid item xs={12} sm={4} display={"flex"} flexDirection={"column"}>
-          <Chartspaper>
-            <NodeChartContainer />
-            <InfoCard title="sample" description="sample text" />
-          </Chartspaper>
-        </Grid>
-        <Grid item xs={12} sm={8} display={"flex"} flexDirection={"column"}>
-          <Chartspaper>
-            <LineSeriesChartContainer />
-            <InfoCard title="sample" description="sample text" />
-          </Chartspaper>
-        </Grid>
+        {chartItems.slice(3).map((item, index) => (
+          <Grid
+            item
+            key={index + 3} // Adjusted index to ensure unique keys
+            xs={item.xs}
+            sm={item.sm}
+            display="flex"
+            flexDirection="column"
+          >
+            <Chartspaper>
+              {item.content}
+              <InfoCard title={item.infoTitle} description={item.infoDescription} />
+            </Chartspaper>
+          </Grid>
+        ))}
       </Grid>
     </Box>
   );

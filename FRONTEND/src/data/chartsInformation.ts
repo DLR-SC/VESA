@@ -1,5 +1,5 @@
 
-export const chartsInformation = {
+export const chartsInfo = {
     wordCloud: {
       title: "Word Cloud",
       description: "Displays a thematic overview of the datasets by presenting keywords extracted from dataset metadata in a word cloud format. The size of each word reflects its frequency or significance, allowing users to quickly identify the most common themes across the dataset collection."
