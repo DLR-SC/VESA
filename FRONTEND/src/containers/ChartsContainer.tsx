@@ -1,6 +1,4 @@
-import { Box, Grid, Paper, useTheme } from "@mui/material";
-import { appBarHeight } from "../components/AppBar";
-import { calculateRowHeights } from "../store/dataset/utility/utility";
+import { Box, Grid, useTheme } from "@mui/material";
 import ResultBox from "../components/ResultBox";
 import SearchBox from "../components/SearchBox";
 import GeoContainer from "./GeoContainer";
@@ -11,11 +9,6 @@ import Chartspaper from "../components/ChartsPaper";
 
 function ChartsContainer(): JSX.Element {
   const theme = useTheme();
-  const viewportHeight = window.innerHeight;
-  const { firstRowHeight, secondRowHeight } = calculateRowHeights(
-    viewportHeight,
-    appBarHeight
-  );
 
   const gridSettings = {
     flex: 1,
@@ -33,7 +26,9 @@ function ChartsContainer(): JSX.Element {
           </Chartspaper>
         </Grid>
         <Grid item xs={4} display={"flex"} flexDirection={"column"}>
-          <ResultBox />
+          <Chartspaper>
+            <ResultBox />
+          </Chartspaper>
         </Grid>
         <Grid item xs={4} display={"flex"} flexDirection={"column"}>
           <Chartspaper>
