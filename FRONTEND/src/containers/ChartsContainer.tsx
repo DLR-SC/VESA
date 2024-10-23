@@ -6,6 +6,7 @@ import LineSeriesChartContainer from "./LineSeriesChartContainer";
 import NodeChartContainer from "./NodeChartContainer";
 import WordCloudContainer from "./WordCloudContainer";
 import Chartspaper from "../components/ChartsPaper";
+import InfoCard from "../components/InfoCard";
 
 function ChartsContainer(): JSX.Element {
   const theme = useTheme();
@@ -21,18 +22,23 @@ function ChartsContainer(): JSX.Element {
       <Grid container {...gridSettings} paddingBottom={0}>
         <Grid item xs={4} display={"flex"} flexDirection={"column"}>
           <Chartspaper>
-            <SearchBox />
-            <WordCloudContainer />
+            <>
+              <SearchBox />
+              <WordCloudContainer />
+            </>
+            <InfoCard title="sample" description="sample text" />
           </Chartspaper>
         </Grid>
         <Grid item xs={4} display={"flex"} flexDirection={"column"}>
           <Chartspaper>
             <ResultBox />
+            <InfoCard title="sample" description="sample text" />
           </Chartspaper>
         </Grid>
         <Grid item xs={4} display={"flex"} flexDirection={"column"}>
           <Chartspaper>
             <GeoContainer />
+            <InfoCard title="sample" description="sample text" />
           </Chartspaper>
         </Grid>
       </Grid>
@@ -40,11 +46,13 @@ function ChartsContainer(): JSX.Element {
         <Grid item xs={12} sm={4} display={"flex"} flexDirection={"column"}>
           <Chartspaper>
             <NodeChartContainer />
+            <InfoCard title="sample" description="sample text" />
           </Chartspaper>
         </Grid>
         <Grid item xs={12} sm={8} display={"flex"} flexDirection={"column"}>
           <Chartspaper>
             <LineSeriesChartContainer />
+            <InfoCard title="sample" description="sample text" />
           </Chartspaper>
         </Grid>
       </Grid>
