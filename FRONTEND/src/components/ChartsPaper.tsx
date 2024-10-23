@@ -9,10 +9,10 @@ interface ChartsPaperProps {
 
 const Chartspaper: React.FC<ChartsPaperProps> = ({ children }) => {
   const theme = useTheme();
-  const [flipped, setFlipped] = useState(true);
+  const [revealed, setRevealed] = useState(false);
 
-  const handleFlip = () => {
-    setFlipped((prev) => !prev);
+  const handleToggle = () => {
+    setRevealed((prev) => !prev);
   };
 
   return (
@@ -22,15 +22,15 @@ const Chartspaper: React.FC<ChartsPaperProps> = ({ children }) => {
         display: "flex",
         flexDirection: "column",
         textAlign: "center",
-        flex: "1",
+        flex: 1,
         width: "100%",
-        perspective: "1000px",
         overflow: "hidden",
+        padding: theme.spacing(2)
       }}
     >
       <Button
-        onClick={handleFlip}
-        variant="contained"
+        onClick={handleToggle}
+        variant={revealed ? "text" : "contained"}
         sx={{
           position: "absolute",
           top: theme.spacing(0),
@@ -38,60 +38,44 @@ const Chartspaper: React.FC<ChartsPaperProps> = ({ children }) => {
           borderRadius: "0 4px 0 4px",
           padding: "0.1rem",
           minWidth: "1rem",
+          boxShadow: 0,
           zIndex: 2,
         }}
       >
-        {flipped ? (
-          <CloseIcon sx={{ fontSize: "1.2rem" }} />
+        {revealed ? (
+          <CloseIcon />
         ) : (
           <InfoOutlined sx={{ fontSize: "0.8rem" }} />
         )}
       </Button>
+      {/* Front Content */}
       <div
         style={{
+          flex: 1,
           display: "flex",
           flexDirection: "column",
-          flex: 1,
-          transformStyle: "preserve-3d",
-          transition: "transform 0.3s",
-          transform: flipped ? "rotateY(180deg)" : "none",
+          opacity: revealed ? 0 : 1,
+          transition: "opacity 0.3s",
         }}
       >
-        {/* Front Side */}
-        <div
-          style={{
-            backfaceVisibility: "hidden",
-            width: "100%",
-            height: "100%",
-            display: flipped ? "none" : "flex",
-            flexDirection: "column",
-            flex: 1,
-            padding: theme.spacing(2),
-          }}
-        >
-          {children}
-        </div>
-        {/* Back Side */}
-        <div
-          style={{
-            backfaceVisibility: "hidden",
-            transform: "rotateY(180deg)",
-            width: "100%",
-            height: "100%",
-            display: flipped ? "flex" : "none",
-            flexDirection: "column",
-            flex: 1,
-            backgroundColor: theme.palette.primary.main,
-            color: theme.palette.background.paper,
-          }}
-        >
-          <div
-            style={{
-              height: "100%",
-            }}
-          >
-            Card info
-          </div>
+        {children}
+      </div>
+      {/* Back Content */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          right: 0,
+          width: "100%",
+          height: "100%",
+          transformOrigin: "top right",
+          transform: revealed ? "scale(1, 1)" : "scale(0, 0)",
+          transition: "transform 0.3s",
+          zIndex: 1,
+        }}
+      >
+        <div>
+          Card info
         </div>
       </div>
     </Paper>
