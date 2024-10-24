@@ -53,6 +53,7 @@ const ToggleButton: React.FC<{ revealed: boolean; onClick: () => void }> = ({
   revealed,
   onClick,
 }) => {
+  const theme =useTheme()
   return (
     <Button
       onClick={onClick}
@@ -68,7 +69,7 @@ const ToggleButton: React.FC<{ revealed: boolean; onClick: () => void }> = ({
         zIndex: 2,
       }}
     >
-      {revealed ? <CloseIcon /> : <InfoOutlined sx={{ fontSize: "0.8rem" }} />}
+      {revealed ? <CloseIcon sx={{color: theme.palette.background.default}}/> : <InfoOutlined sx={{ fontSize: "0.8rem" }} />}
     </Button>
   );
 };

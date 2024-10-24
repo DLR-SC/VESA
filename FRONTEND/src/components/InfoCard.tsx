@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardContent, Typography } from '@mui/material';
+import { Card, CardContent, Typography, useTheme } from '@mui/material';
 
 interface InfoCardProps {
   title: string;
@@ -7,13 +7,17 @@ interface InfoCardProps {
 }
 
 const InfoCard: React.FC<InfoCardProps> = ({ title, description }) => {
+  const theme = useTheme();
+
   return (
     <Card
       sx={{
         height: '100%',          
         display: 'flex',
         flexDirection: 'column',
-        overflowY: 'auto'
+        overflowY: 'auto',
+        backgroundColor: theme.palette.primary.main,
+        color: theme.palette.getContrastText(theme.palette.primary.main)
       }}
     >
       <CardContent sx={{ flexGrow: 1 }}>
