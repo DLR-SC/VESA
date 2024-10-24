@@ -10,7 +10,7 @@ import { useDatafill } from "../hooks/useDatafill";
 import { resetDatasetSlice } from "../store/dataset/datasetSlice";
 import { useAppDispatch } from "../store/hooks";
 import { resetSelectedKeyword } from "../store/selectedKeyword/selectedKeywordSlice";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { useState } from "react";
 import PopoverComponent from "./PopoverComponent";
 
@@ -73,7 +73,7 @@ function AppBar(): JSX.Element {
         onClick={handlePopoverOpen}
         data-testid="info-button"
       >
-        <InfoOutlinedIcon sx={{ fontSize: "1.6rem" }} />
+        <HelpOutlineIcon sx={{ fontSize: "1.6rem" }} />
       </IconButton>
       {showPopover && (
         <PopoverComponent
