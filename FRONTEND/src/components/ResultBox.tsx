@@ -1,9 +1,7 @@
 import {
   Box,
-  CircularProgress,
-  Paper,
-  Typography,
-  useTheme,
+  CircularProgress, Typography,
+  useTheme
 } from "@mui/material";
 import { useCallback } from "react";
 import { useAppSelector } from "../store/hooks";
@@ -54,13 +52,13 @@ function ResultBox(props: IContainerProps): JSX.Element {
   }, [isFetching, isLoading, tableData]);
 
   return (
-    <Paper
+    <Box
       sx={{
-        padding: theme.spacing(2),
         height: "100%",
         width: "100%",
         display: "flex",
         flexDirection: "column",
+        textAlign: "initial"
       }}
     >
       <Box padding={2} display={"flex"}>
@@ -98,7 +96,7 @@ function ResultBox(props: IContainerProps): JSX.Element {
           {renderContent()}
         </Box>
       </Box>
-    </Paper>
+    </Box>
   );
 }
 

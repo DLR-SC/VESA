@@ -1,16 +1,26 @@
 import RefreshIcon from "@mui/icons-material/Refresh";
-import { Fab, Tooltip, Typography, useTheme } from "@mui/material";
+import {
+  Fab,
+  IconButton, Tooltip,
+  Typography,
+  useTheme
+} from "@mui/material";
 import Box from "@mui/material/Box";
 import { useDatafill } from "../hooks/useDatafill";
 import { resetDatasetSlice } from "../store/dataset/datasetSlice";
 import { useAppDispatch } from "../store/hooks";
 import { resetSelectedKeyword } from "../store/selectedKeyword/selectedKeywordSlice";
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import { useState } from "react";
+import PopoverComponent from "./PopoverComponent";
 
 export const appBarHeight = 56; //appBar height constant declaration
 
 function AppBar(): JSX.Element {
   const theme = useTheme();
   const dispatch = useAppDispatch();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [showPopover, setShowPopover] = useState<boolean>(false);
 
   const { initialSetterBundle } = useDatafill();
 
@@ -18,6 +28,15 @@ function AppBar(): JSX.Element {
     dispatch(resetSelectedKeyword());
     dispatch(resetDatasetSlice());
     initialSetterBundle();
+  };
+
+  const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+    setShowPopover(true);
+  };
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+    setShowPopover(false);
   };
 
   return (
@@ -34,22 +53,6 @@ function AppBar(): JSX.Element {
         justifyContent: "space-between",
       }}
     >
-      <Typography variant="h1">
-        {" "}
-        <b>Graph Based Visual Search Engine </b>{" "}
-      </Typography>{" "}
-      <Typography variant="body2" fontWeight={"600"}>
-        {" "}
-        Click{" "}
-        <a
-          href="https://forms.gle/21L8XnXBF1wJPanE8"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          here
-        </a>{" "}
-        to evaluate this application and provide your feedback{" "}
-      </Typography>
       <Tooltip title="Reset all filters">
         <Fab
           size="small"
@@ -60,6 +63,27 @@ function AppBar(): JSX.Element {
           <RefreshIcon />
         </Fab>
       </Tooltip>
+      <Typography variant="h1">
+        <b>Visualisation Enabled Search Application</b>
+      </Typography>
+      <IconButton
+        aria-label="top-bar-info-button"
+        color="primary"
+        sx={{ textDecoration: "overline" }}
+        onClick={handlePopoverOpen}
+        data-testid="info-button"
+      >
+        <HelpOutlineIcon sx={{ fontSize: "1.6rem" }} />
+      </IconButton>
+      {showPopover && (
+        <PopoverComponent
+          anchorEl={anchorEl}
+          onClose={handlePopoverClose}
+          open={showPopover}
+        >
+          Popover content
+        </PopoverComponent>
+      )}
     </Box>
   );
 }
