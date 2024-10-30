@@ -13,6 +13,7 @@ import abstractRouter from "./routes/getAbstractbyId";
 import authorRouter from "./routes/getAuthorById";
 import mapRouter from "./routes/getMapData";
 import persistantRouter from "./routes/persist";
+import healthCheckRouter from "./routes/healthCheck";
 
 import locationNameRouter from "./routes/getLocationName";
 
@@ -69,6 +70,9 @@ app.use("/locname", locationNameRouter);
 
 // POST /persist
 app.use("/persist", persistantRouter);
+
+// Services health poll
+app.use("/health", healthCheckRouter);
 
 app.listen(expressPort, () => {
   console.log(`Server started on port ${expressPort}`);
