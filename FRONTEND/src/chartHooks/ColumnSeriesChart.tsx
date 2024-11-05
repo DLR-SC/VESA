@@ -57,7 +57,7 @@ function ColumnSeriesChart(props: ITimeSeriesProps): JSX.Element {
         max: new Date(initialDate.end_date as string).getTime(),
         strictMinMaxSelection: true,
         maxDeviation: 0.1,
-        groupData:true,
+        groupData: true,
         baseInterval: {
           timeUnit: "day",
           count: 1,
@@ -235,7 +235,13 @@ function ColumnSeriesChart(props: ITimeSeriesProps): JSX.Element {
       const sbSeries = scrollbarRef.current.chart.series.getIndex(0);
 
       if (mainSeries && sbSeries) {
-        mainSeries.data.setAll(props.data);
+        // replacing 0 values with null for columnSeries
+        const processedData = props.data.map(({ date, value }) => ({
+          date,
+          value: value || null,
+        }));
+
+        mainSeries.data.setAll(processedData);
         sbSeries.data.setAll(props.data);
       }
 
