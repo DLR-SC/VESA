@@ -4,17 +4,13 @@
 name: Epic
 description: Create a new epic
 title: "[EPIC]: "
-projects: "DLR-SC/5"
 labels: ["Epic"]
 body:
   - type: checkboxes
     id: pre-steps
     attributes:
-      label: Things to do durng epic creation
       options:
         - label: Create a Label with a short name for this epic (`Epic:ShortName`) with the color `#4660F9` and add the label to this issue
-          required: true
-        - label: Add this Issue to the "ESID-Frontend" Project board
           required: true
         - label: Crate a branch for this epic (`feature/short-name`) and add it in the development field
           required: true
