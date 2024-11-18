@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Paper, useTheme, Button, Theme } from "@mui/material";
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
 import CloseIcon from "@mui/icons-material/Close";
-import InfoCard from "./InfoCard";
 
 /** A Mui Paper card component which  can be used to reveal further information of its contents by an information button toggler. 
  * The first child will be the main content and the subsequent child will be the Information content*/
@@ -69,7 +68,7 @@ const ToggleButton: React.FC<{ revealed: boolean; onClick: () => void }> = ({
         zIndex: 2,
       }}
     >
-      {revealed ? <CloseIcon sx={{color: theme.palette.background.default}}/> : <InfoOutlined sx={{ fontSize: "0.8rem" }} />}
+      {revealed ? <CloseIcon sx={{color:  theme.palette.primary.main}}/> : <InfoOutlined sx={{ fontSize: "0.8rem" }} />}
     </Button>
   );
 };
