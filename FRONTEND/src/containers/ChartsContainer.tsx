@@ -1,103 +1,86 @@
-import { Box, Grid, useTheme } from "@mui/material";
+import { useMemo } from "react";
+import RGL, { Layout, WidthProvider } from "react-grid-layout";
+import Chartspaper from "../components/ChartsPaper";
+import InfoCard from "../components/InfoCard";
 import ResultBox from "../components/ResultBox";
 import SearchBox from "../components/SearchBox";
+import { chartsInfo } from "../data/chartsInformation";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import GeoContainer from "./GeoContainer";
 import LineSeriesChartContainer from "./LineSeriesChartContainer";
 import NodeChartContainer from "./NodeChartContainer";
 import WordCloudContainer from "./WordCloudContainer";
-import Chartspaper from "../components/ChartsPaper";
-import InfoCard from "../components/InfoCard";
-import { chartsInfo } from "../data/chartsInformation";
+import { updateGridLayout } from "../store/ui/uiSlice";
 
-function ChartsContainer(): JSX.Element {
-  const theme = useTheme();
+// Chart items configuration array
+const chartItems = [
+  {
+    key: "search_wordcloud",
+    content: (
+      <>
+        <SearchBox />
+        <WordCloudContainer />
+      </>
+    ),
+    infoTitle: chartsInfo.wordCloud.title,
+    infoDescription: chartsInfo.wordCloud.description,
+  },
+  {
+    key: "results",
+    content: <ResultBox />,
+    infoTitle: chartsInfo.resultsTable.title,
+    infoDescription: chartsInfo.resultsTable.description,
+  },
+  {
+    key: "geo",
+    content: <GeoContainer />,
+    infoTitle: chartsInfo.mapsContainer.title,
+    infoDescription: chartsInfo.mapsContainer.description,
+  },
+  {
+    key: "node_chart",
+    content: <NodeChartContainer />,
+    infoTitle: chartsInfo.nordDirectedGraphs.title,
+    infoDescription: chartsInfo.nordDirectedGraphs.description,
+  },
+  {
+    key: "line_series",
+    content: <LineSeriesChartContainer />,
+    infoTitle: chartsInfo.columnBarChart.title,
+    infoDescription: chartsInfo.columnBarChart.description,
+  },
+];
 
-  const gridSettings = {
-    flex: 1,
-    padding: theme.spacing(2),
-    columnSpacing: theme.spacing(2),
+const ChartsContainer = (): JSX.Element => {
+  const ReactGridLayout = useMemo(() => WidthProvider(RGL), []);
+  const realignMode = useAppSelector((state) => state.ui.realignMode);
+  const gridLayout = useAppSelector((state) => state.ui.gridLayout);
+  const dispatch = useAppDispatch();
+
+  const handleLayoutChange = (layout: Layout[]) => {
+    dispatch(updateGridLayout(layout));
   };
 
-  // Configuration array for chart items
-  const chartItems = [
-    {
-      xs: 4,
-      content: (
-        <>
-          <SearchBox />
-          <WordCloudContainer />
-        </>
-      ),
-      infoTitle: chartsInfo.wordCloud.title,
-      infoDescription: chartsInfo.wordCloud.description,
-    },
-    {
-      xs: 4,
-      content: <ResultBox />,
-      infoTitle: chartsInfo.resultsTable.title,
-      infoDescription: chartsInfo.resultsTable.description,
-    },
-    {
-      xs: 4,
-      content: <GeoContainer />,
-      infoTitle: chartsInfo.mapsContainer.title,
-      infoDescription: chartsInfo.mapsContainer.description,
-    },
-    {
-      xs: 12,
-      sm: 4,
-      content: <NodeChartContainer />,
-      infoTitle: chartsInfo.nordDirectedGraphs.title,
-      infoDescription: chartsInfo.nordDirectedGraphs.description,
-    },
-    {
-      xs: 12,
-      sm: 8,
-      content: <LineSeriesChartContainer />,
-      infoTitle: chartsInfo.columnBarChart.title,
-      infoDescription: chartsInfo.columnBarChart.description,
-    },
-  ];
-
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
-      {/* First Row */}
-      <Grid container {...gridSettings} paddingBottom={0}>
-        {chartItems.slice(0, 3).map((item, index) => (
-          <Grid
-            item
-            key={index}
-            xs={item.xs}
-            display="flex"
-            flexDirection="column"
-          >
-            <Chartspaper>
-              {item.content}
-              <InfoCard title={item.infoTitle} description={item.infoDescription} />
-            </Chartspaper>
-          </Grid>
-        ))}
-      </Grid>
-      {/* Second Row */}
-      <Grid container {...gridSettings}>
-        {chartItems.slice(3).map((item, index) => (
-          <Grid
-            item
-            key={index + 3} // Adjusted index to ensure unique keys
-            xs={item.xs}
-            sm={item.sm}
-            display="flex"
-            flexDirection="column"
-          >
-            <Chartspaper>
-              {item.content}
-              <InfoCard title={item.infoTitle} description={item.infoDescription} />
-            </Chartspaper>
-          </Grid>
-        ))}
-      </Grid>
-    </Box>
+    <ReactGridLayout
+      className="layout"
+      layout={gridLayout}
+      isDraggable={realignMode}
+      isResizable={realignMode}
+      margin={[10, 10]}
+      useCSSTransforms={true}
+      onLayoutChange={handleLayoutChange}
+    >
+      {chartItems.map(({ key, content, infoTitle, infoDescription }) => (
+        <div key={key} className="chart-container">
+          <Chartspaper realignMode={realignMode}>
+            {content}
+            <InfoCard title={infoTitle} description={infoDescription} />
+          </Chartspaper>
+        </div>
+      ))}
+    </ReactGridLayout>
   );
-}
+};
 
 export default ChartsContainer;

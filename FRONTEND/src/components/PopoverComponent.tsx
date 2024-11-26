@@ -16,7 +16,7 @@ function PopoverComponent(props: InfoPopoverProps): JSX.Element {
       anchorEl={props.anchorEl}
       onClose={props.onClose}
       anchorOrigin={{
-        vertical: "top",
+        vertical: "bottom",
         horizontal: "right",
       }}
       sx={{

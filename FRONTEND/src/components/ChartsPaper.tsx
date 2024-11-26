@@ -1,14 +1,15 @@
-import React, { useState } from "react";
-import { Paper, useTheme, Button, Theme } from "@mui/material";
-import InfoOutlined from "@mui/icons-material/InfoOutlined";
 import CloseIcon from "@mui/icons-material/Close";
+import InfoOutlined from "@mui/icons-material/InfoOutlined";
+import { Button, Paper, Theme, useTheme } from "@mui/material";
+import React, { useEffect, useRef, useState } from "react";
 
-/** A Mui Paper card component which  can be used to reveal further information of its contents by an information button toggler. 
+/** A Mui Paper card component which  can be used to reveal further information of its contents by an information button toggler.
  * The first child will be the main content and the subsequent child will be the Information content*/
 
 // Interface for the props
 interface ChartsPaperProps {
   children: [React.ReactNode, React.ReactNode];
+  realignMode?: boolean; //Boolean to control realign mode. Enabling this flag disables the close button and interactivity of the components for seamless layout changes
 }
 
 // Styles helper
@@ -26,21 +27,31 @@ const useStyles = (theme: Theme) => ({
 });
 
 // Main Chartspaper component
-const Chartspaper: React.FC<ChartsPaperProps> = ({ children }) => {
+const Chartspaper = ({ children, realignMode = false }: ChartsPaperProps) => {
   const theme = useTheme();
   const [revealed, setRevealed] = useState(false);
+  const previousRealignMode = useRef(realignMode);
 
   const handleToggle = () => setRevealed((prev) => !prev);
 
   const styles = useStyles(theme);
 
-  const [mainContent, revelaedContent] = children;
+  const [mainContent, revealedContent] = children;
+
+  useEffect(() => {
+    if (realignMode !== previousRealignMode.current) {
+      setRevealed(realignMode);
+      previousRealignMode.current = realignMode;
+    }
+  }, [realignMode]);
 
   return (
     <Paper sx={styles.paper}>
-      <ToggleButton revealed={revealed} onClick={handleToggle} />
+      {!realignMode && (
+        <ToggleButton revealed={revealed} onClick={handleToggle} />
+      )}
       <MainContent revealed={revealed}>{mainContent}</MainContent>
-      <RevealContent revealed={revealed}>{revelaedContent}</RevealContent>
+      <RevealContent revealed={revealed}>{revealedContent}</RevealContent>
     </Paper>
   );
 };
@@ -52,7 +63,7 @@ const ToggleButton: React.FC<{ revealed: boolean; onClick: () => void }> = ({
   revealed,
   onClick,
 }) => {
-  const theme =useTheme()
+  const theme = useTheme();
   return (
     <Button
       onClick={onClick}
@@ -68,7 +79,11 @@ const ToggleButton: React.FC<{ revealed: boolean; onClick: () => void }> = ({
         zIndex: 2,
       }}
     >
-      {revealed ? <CloseIcon sx={{color:  theme.palette.primary.main}}/> : <InfoOutlined sx={{ fontSize: "0.8rem" }} />}
+      {revealed ? (
+        <CloseIcon sx={{ color: theme.palette.primary.main }} />
+      ) : (
+        <InfoOutlined sx={{ fontSize: "0.8rem" }} />
+      )}
     </Button>
   );
 };
@@ -77,7 +92,7 @@ const ToggleButton: React.FC<{ revealed: boolean; onClick: () => void }> = ({
 const MainContent: React.FC<{
   revealed: boolean;
   children: React.ReactNode;
-}> = ({ revealed, children }) => {
+}> = React.memo(({ revealed, children }) => {
   return (
     <div
       style={{
@@ -91,13 +106,13 @@ const MainContent: React.FC<{
       {children}
     </div>
   );
-};
+});
 
 // Reveal Content Component
 const RevealContent: React.FC<{
   revealed: boolean;
   children: React.ReactNode;
-}> = ({ revealed, children }) => {
+}> = React.memo(({ revealed, children }) => {
   return (
     <div
       style={{
@@ -109,10 +124,9 @@ const RevealContent: React.FC<{
         transformOrigin: "top right",
         transform: revealed ? "scale(1)" : "scale(0)",
         transition: "transform 0.3s",
-        zIndex: 1,
       }}
     >
       {children}
     </div>
   );
-};
+});
