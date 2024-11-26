@@ -1,0 +1,13 @@
+# SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+# SPDX-License-Identifier: CC0-1.0
+
+name: Blank Issue
+description: Create a blank issue
+body:
+  - type: textarea
+    id: content
+    attributes:
+      label: Description
+      description: Describe the issue.
+    validations:
+      required: true
