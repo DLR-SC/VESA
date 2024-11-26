@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Paper, useTheme, Button, Theme } from "@mui/material";
-import InfoOutlined from "@mui/icons-material/InfoOutlined";
 import CloseIcon from "@mui/icons-material/Close";
+import InfoOutlined from "@mui/icons-material/InfoOutlined";
+import { Button, Paper, Theme, useTheme } from "@mui/material";
+import React, { useEffect, useRef, useState } from "react";
 
 /** A Mui Paper card component which  can be used to reveal further information of its contents by an information button toggler.
  * The first child will be the main content and the subsequent child will be the Information content*/
@@ -30,6 +30,7 @@ const useStyles = (theme: Theme) => ({
 const Chartspaper = ({ children, realignMode = false }: ChartsPaperProps) => {
   const theme = useTheme();
   const [revealed, setRevealed] = useState(false);
+  const previousRealignMode = useRef(realignMode);
 
   const handleToggle = () => setRevealed((prev) => !prev);
 
@@ -38,8 +39,9 @@ const Chartspaper = ({ children, realignMode = false }: ChartsPaperProps) => {
   const [mainContent, revealedContent] = children;
 
   useEffect(() => {
-    if (realignMode) {
-      setRevealed(true);
+    if (realignMode !== previousRealignMode.current) {
+      setRevealed(realignMode);
+      previousRealignMode.current = realignMode;
     }
   }, [realignMode]);
 

@@ -1,6 +1,6 @@
 import { ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { setRealignMode } from "../../store/ui/uiSlice";
+import { resetLayout, setRealignMode } from "../../store/ui/uiSlice";
 import EditIcon from "@mui/icons-material/Edit";
 import ReplayIcon from "@mui/icons-material/Replay";
 
@@ -18,13 +18,17 @@ const GridLayoutMenu = ({
   const dispatch = useAppDispatch();
   const realignMode = useAppSelector((state) => state.ui.realignMode);
 
-  const handleResetLayout = () => {
+  const handleToggleEditLayout = () => {
     if (realignMode) {
       dispatch(setRealignMode(false));
     }
-    if(!realignMode){
+    if (!realignMode) {
       dispatch(setRealignMode(true));
     }
+  };
+
+  const handleResetLayout = () => {
+    dispatch(resetLayout());
   };
 
   return (
@@ -35,13 +39,15 @@ const GridLayoutMenu = ({
       onClose={onClose}
       MenuListProps={{ "aria-labelledby": "grid-settings-button" }}
     >
-      <MenuItem onClick={handleResetLayout} selected={realignMode}>
+      <MenuItem onClick={handleToggleEditLayout} selected={realignMode}>
         <ListItemIcon>
           <EditIcon fontSize="medium" />
         </ListItemIcon>
-        <ListItemText>{realignMode ? "Exit Edit Mode" : "Edit Layout"}</ListItemText>
+        <ListItemText>
+          {realignMode ? "Exit Edit Mode" : "Edit Layout"}
+        </ListItemText>
       </MenuItem>
-      <MenuItem onClick={() => console.log("Reset layout clicked")}>
+      <MenuItem onClick={handleResetLayout}>
         <ListItemIcon>
           <ReplayIcon fontSize="medium" />
         </ListItemIcon>

@@ -1,25 +1,16 @@
-import { useEffect, useMemo } from "react";
-import { Box, useTheme } from "@mui/material";
-import RGL, { WidthProvider, Layout } from "react-grid-layout";
-import SearchBox from "../components/SearchBox";
+import { useMemo } from "react";
+import RGL, { Layout, WidthProvider } from "react-grid-layout";
+import Chartspaper from "../components/ChartsPaper";
+import InfoCard from "../components/InfoCard";
 import ResultBox from "../components/ResultBox";
+import SearchBox from "../components/SearchBox";
+import { chartsInfo } from "../data/chartsInformation";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import GeoContainer from "./GeoContainer";
 import LineSeriesChartContainer from "./LineSeriesChartContainer";
 import NodeChartContainer from "./NodeChartContainer";
 import WordCloudContainer from "./WordCloudContainer";
-import { chartsInfo } from "../data/chartsInformation";
-import Chartspaper from "../components/ChartsPaper";
-import InfoCard from "../components/InfoCard";
-import { useAppSelector } from "../store/hooks";
-
-// Layout settings for each item (position and size)
-const layout: Layout[] = [
-  { i: "search_wordcloud", x: 0, y: 0, w: 4, h: 2, minW: 4, minH: 2 },
-  { i: "results", x: 4, y: 0, w: 4, h: 2, minW: 2, minH: 2 },
-  { i: "geo", x: 8, y: 0, w: 4, h: 2, minW: 4, minH: 2 },
-  { i: "node_chart", x: 0, y: 3, w: 4, h: 2, minW: 4, minH: 2 },
-  { i: "line_series", x: 4, y: 3, w: 8, h: 2, minW: 4, minH: 2 },
-];
+import { updateGridLayout } from "../store/ui/uiSlice";
 
 // Chart items configuration array
 const chartItems = [
@@ -61,50 +52,33 @@ const chartItems = [
 ];
 
 const ChartsContainer = (): JSX.Element => {
-  const theme = useTheme();
   const ReactGridLayout = useMemo(() => WidthProvider(RGL), []);
   const realignMode = useAppSelector((state) => state.ui.realignMode);
+  const gridLayout = useAppSelector((state) => state.ui.gridLayout);
+  const dispatch = useAppDispatch();
 
-  const ChartItem = ({
-    content,
-    infoTitle,
-    infoDescription,
-  }: {
-    content: React.ReactNode;
-    infoTitle: string;
-    infoDescription: string;
-  }) => (
-    <Chartspaper realignMode={realignMode}>
-      {content}
-      <InfoCard title={infoTitle} description={infoDescription} />
-    </Chartspaper>
-  );
-
-  const gridItems = useMemo(
-    () =>
-      chartItems.map(({ key, content, infoTitle, infoDescription }) => (
-        <div key={key} className="chart-container">
-          <ChartItem
-            content={content}
-            infoTitle={infoTitle}
-            infoDescription={infoDescription}
-          />
-        </div>
-      )),
-    [chartItems, realignMode]
-  );
+  const handleLayoutChange = (layout: Layout[]) => {
+    dispatch(updateGridLayout(layout));
+  };
 
   return (
     <ReactGridLayout
       className="layout"
-      layout={layout}
-      // maxRows={2}
+      layout={gridLayout}
       isDraggable={realignMode}
       isResizable={realignMode}
       margin={[10, 10]}
       useCSSTransforms={true}
+      onLayoutChange={handleLayoutChange}
     >
-      {gridItems}
+      {chartItems.map(({ key, content, infoTitle, infoDescription }) => (
+        <div key={key} className="chart-container">
+          <Chartspaper realignMode={realignMode}>
+            {content}
+            <InfoCard title={infoTitle} description={infoDescription} />
+          </Chartspaper>
+        </div>
+      ))}
     </ReactGridLayout>
   );
 };
