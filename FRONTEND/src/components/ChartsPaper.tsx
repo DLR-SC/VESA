@@ -27,7 +27,7 @@ const useStyles = (theme: Theme) => ({
 });
 
 // Main Chartspaper component
-const Chartspaper = ({ children, realignMode = true }: ChartsPaperProps) => {
+const Chartspaper = ({ children, realignMode = false }: ChartsPaperProps) => {
   const theme = useTheme();
   const [revealed, setRevealed] = useState(false);
 
