@@ -19,8 +19,7 @@ interface GeoDataItem {
   groupId: string;
 }
 
-const LegendToggleIconSvgPath =
-  "M20 15H4v-2h16zm0 2H4v2h16zm-5-6 5-3.55V5l-5 3.55L10 5 4 8.66V11l5.92-3.61z";
+const LegendToggleIconSvgPath = "M7 4v16h12";
 
 function getColorByGroupId(groupId: string): am5.Color {
   switch (groupId) {
@@ -173,7 +172,10 @@ function createLegendButton(
       svgPath: LegendToggleIconSvgPath,
       height: 30,
       width: 30,
-      fill: am5.color(0xffffff),
+      stroke: am5.color(0xffffff),
+      strokeWidth: 4,
+      x: 5,
+      y: 5,
     }),
     tooltip: tooltip,
     tooltipText: "Toggle map legends",
